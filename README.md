@@ -12,15 +12,23 @@ One workflow file gives maintainers automatic scoring, labeling, and tamper-evid
 
 ## Two-minute demo
 
-|                          | Complete report                                                                        | Incomplete report                                                                      |
-| ------------------------ | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| **Issue**                | [#1 — hash mismatch bug](https://github.com/gietsmaximiliano-pixel/reprogate/issues/1) | [#2 — "it doesn't work"](https://github.com/gietsmaximiliano-pixel/reprogate/issues/2) |
-| **Score**                | 93 / 100                                                                               | 54 / 100                                                                               |
-| **Label**                | `reprogate:complete`                                                                   | `reprogate:needs-info`                                                                 |
-| **What the Action does** | Validates evidence, comments with scorecard, applies label                             | Lists missing fields, asks reporter to fill them in                                    |
+|                          | Complete report                                                                                   | Incomplete report                                                                                                            |
+| ------------------------ | ------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **Demo repo**            | [gietsmaximiliano-pixel/reprogate-demo](https://github.com/gietsmaximiliano-pixel/reprogate-demo) | [gietsmaximiliano-pixel/reprogate-demo](https://github.com/gietsmaximiliano-pixel/reprogate-demo)                            |
+| **Issue**                | [#2 - widget title truncation](https://github.com/gietsmaximiliano-pixel/reprogate-demo/issues/2) | [#1 - missing reproduction details](https://github.com/gietsmaximiliano-pixel/reprogate-demo/issues/1)                       |
+| **Score**                | 93 / 100                                                                                          | 0 / 100                                                                                                                      |
+| **Label**                | `reprogate:complete`                                                                              | `reprogate:needs-info`                                                                                                       |
+| **What the Action does** | Validates evidence, comments with scorecard, applies label                                        | Lists missing `actualBehavior`, `environment`, `expectedBehavior`, and `stepsToReproduce`, then applies the needs-info label |
 
-Both issues above were validated automatically by the ReproGate Action in this repository.
-No tool was installed by either reporter — they filled in a form on GitHub.
+Both issues above were validated automatically by the ReproGate Action in a separate public demo repository.
+No tool was installed by either reporter; they filled in a form on GitHub.
+
+### Dashboard snapshot
+
+![ReproGate dashboard screenshot](https://raw.githubusercontent.com/gietsmaximiliano-pixel/reprogate-demo/main/assets/dashboard.png)
+
+Short walkthrough video:
+[MP4](https://raw.githubusercontent.com/gietsmaximiliano-pixel/reprogate-demo/main/assets/reprogate-demo.mp4)
 
 ### What a complete report looks like
 
