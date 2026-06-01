@@ -15,7 +15,7 @@ One workflow file gives maintainers automatic scoring, labeling, and tamper-evid
 |                          | Complete report                                                                        | Incomplete report                                                                      |
 | ------------------------ | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
 | **Issue**                | [#1 — hash mismatch bug](https://github.com/gietsmaximiliano-pixel/reprogate/issues/1) | [#2 — "it doesn't work"](https://github.com/gietsmaximiliano-pixel/reprogate/issues/2) |
-| **Score**                | ~93 / 100                                                                              | ~26 / 100                                                                              |
+| **Score**                | 93 / 100                                                                               | 54 / 100                                                                               |
 | **Label**                | `reprogate:complete`                                                                   | `reprogate:needs-info`                                                                 |
 | **What the Action does** | Validates evidence, comments with scorecard, applies label                             | Lists missing fields, asks reporter to fill them in                                    |
 
@@ -79,17 +79,16 @@ Label applied: reprogate:complete
 ### What an incomplete report triggers
 
 ```
-ReproGate validation: invalid
-Actionability score: 26/100
+ReproGate evidence check: valid
+Actionability score: 54/100
+Suggested label: reprogate:needs-info
 
-Missing fields:
-- summary is too vague (fewer than 20 meaningful characters)
-- expectedBehavior is too vague
-- actualBehavior is too vague
-- humanReviewed must be true
-
-Label applied: reprogate:needs-info
+Missing information: None.
+Invalid fields: None.
 ```
+
+All required fields were present but too vague to score above the threshold (default: 70/100).
+The label `reprogate:needs-info` prompts the reporter to improve their report.
 
 ---
 
