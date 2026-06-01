@@ -1,0 +1,22 @@
+schemaVersion: "0.1"
+reportType: bug
+projectName: safe-run-smoke
+affectedVersion: 0.1.0
+environment:
+  os: Docker Desktop Linux container
+  runtime: Node.js 20
+  dependencies:
+    docker: required
+summary: Safe-run smoke command verifies Docker isolation controls
+expectedBehavior: The smoke command should run in a constrained Docker container and exit successfully.
+actualBehavior: The smoke command reports the observed safe-run controls and fails if a required control is missing.
+stepsToReproduce:
+  - Run the documented verify-safe-run command from the repository root.
+  - Confirm the exact Docker command is printed before execution.
+  - Confirm the smoke command exits successfully.
+commands:
+  - node smoke-check.js
+redactionNotes: No secrets, tokens, or personal data are included.
+aiAssisted: false
+humanReviewed: true
+createdAt: "2026-06-01T00:00:00.000Z"

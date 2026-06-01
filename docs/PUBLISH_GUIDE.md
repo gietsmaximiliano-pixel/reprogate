@@ -88,7 +88,7 @@ Included:
 
 Known limitation:
 
-- Live Docker safe-run execution still needs verification on a machine with Docker Desktop installed.
+- Safe-run remains explicitly opt-in and requires Docker Desktop or Docker Engine on the maintainer machine.
 ```
 
 ## Test installation from a clean folder
@@ -132,11 +132,11 @@ Do not ask pilot maintainers to enable `verify-safe-run` until they have reviewe
 Run this from the repository root on a machine with Docker Desktop available:
 
 ```sh
-node packages/cli/dist/index.js verify-safe-run examples/basic-node-bug/reprogate.yml --yes --timeout 60 --cpus 1 --memory 512m
+node packages/cli/dist/index.js verify-safe-run examples/safe-run-smoke/reprogate.yml --yes --timeout 60 --cpus 1 --memory 512m
 ```
 
 Expected behavior:
 
 - ReproGate prints the exact Docker command before execution.
-- The Docker command includes `--network none`, `--user 1000:1000`, `--read-only`, `--cpus 1`, `--memory 512m`, `--cap-drop ALL`, `--security-opt no-new-privileges`, a read-only repository mount, and an in-container timeout.
-- Docker runs the harmless example command inside the container.
+- The Docker command includes `--network none`, `--user 1000:1000`, `--read-only`, `--cpus 1`, `--memory 512m`, `--cap-drop ALL`, `--security-opt no-new-privileges`, a read-only repository mount, and a Node-based in-container timeout wrapper.
+- Docker runs the harmless `safe-run-smoke` command inside the container.

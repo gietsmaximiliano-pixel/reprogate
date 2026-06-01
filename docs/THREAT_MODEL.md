@@ -31,7 +31,8 @@ The CLI may read local files chosen by the maintainer. `verify-safe-run` is opt-
 - Read-only repository mount.
 - Temporary writable directory.
 - CPU, memory, and timeout limits.
-- In-container timeout wrapper plus parent-process timeout guard.
+- In-container Node timeout wrapper plus parent-process timeout guard.
+- Safe-run commands are parsed into argument arrays and executed without `sh -lc`.
 - Linux capabilities dropped, `no-new-privileges` enabled, and a PID limit applied.
 - No host environment passthrough by default.
 

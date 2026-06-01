@@ -1,0 +1,21 @@
+schemaVersion: "0.1"
+reportType: bug
+projectName: safe-run-timeout-smoke
+affectedVersion: 0.1.0
+environment:
+  os: Docker Desktop Linux container
+  runtime: Node.js 20
+  dependencies:
+    docker: required
+summary: Safe-run timeout fixture verifies long commands are terminated
+expectedBehavior: ReproGate should terminate this long-running command when a short timeout is supplied.
+actualBehavior: The timeout fixture sleeps longer than the supplied timeout and should be stopped by Docker safe-run.
+stepsToReproduce:
+  - Run verify-safe-run against this manifest with --timeout 1.
+  - Confirm the command is stopped before the script can finish normally.
+commands:
+  - node slow-check.js
+redactionNotes: No secrets, tokens, or personal data are included.
+aiAssisted: false
+humanReviewed: true
+createdAt: "2026-06-01T00:00:00.000Z"

@@ -14,5 +14,6 @@ export interface DockerInvocation {
     timeoutSeconds: number;
 }
 export declare function assertSafeCommand(command: string): void;
+export declare function parseCommandWords(command: string): string[];
 export declare function buildDockerSafeRunInvocations(options: DockerSafeRunOptions): DockerInvocation[];
 //# sourceMappingURL=safe-run.d.ts.map

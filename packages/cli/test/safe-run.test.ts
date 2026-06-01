@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { assertSafeCommand, buildDockerSafeRunInvocations } from "../src/safe-run.js";
+import {
+  assertSafeCommand,
+  buildDockerSafeRunInvocations,
+  parseCommandWords
+} from "../src/safe-run.js";
 
 describe("safe-run command construction", () => {
   it("builds Docker invocations with network disabled and read-only repository mounts", () => {
@@ -27,11 +31,21 @@ describe("safe-run command construction", () => {
     expect(invocation?.args).toContain("ALL");
     expect(invocation?.args).toContain("--security-opt");
     expect(invocation?.args).toContain("no-new-privileges");
-    expect(invocation?.args).toContain("timeout");
+    expect(invocation?.args).toContain("node");
+    expect(invocation?.args).toContain("-e");
     expect(invocation?.args).toContain("60");
+    expect(invocation?.args).toContain(JSON.stringify(["npm", "test"]));
+    expect(invocation?.args).not.toContain("sh");
+    expect(invocation?.args).not.toContain("-lc");
     expect(invocation?.args.some((arg) => arg.includes("readonly"))).toBe(true);
-    expect(invocation?.args).not.toContain("-e");
+    const imageIndex = invocation?.args.indexOf("node:20-alpine") ?? -1;
+    expect(invocation?.args.slice(0, imageIndex)).not.toContain("-e");
+    expect(invocation?.args).not.toContain("--env");
     expect(invocation?.args).not.toContain("--env-file");
+  });
+
+  it("parses simple quoted command arguments without shell expansion", () => {
+    expect(parseCommandWords('node -e "console.log(1)"')).toEqual(["node", "-e", "console.log(1)"]);
   });
 
   it("rejects unsafe shell chaining", () => {
@@ -48,6 +62,10 @@ describe("safe-run command construction", () => {
     expect(() => buildDockerSafeRunInvocations({ repoDir: ".", commands: [] })).toThrow(
       /does not include commands/
     );
+  });
+
+  it("accepts the committed safe-run smoke example command", () => {
+    expect(() => assertSafeCommand("node smoke-check.js")).not.toThrow();
   });
 
   it("rejects invalid timeout and resource limits", () => {
