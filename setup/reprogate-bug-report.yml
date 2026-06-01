@@ -1,0 +1,43 @@
+name: Bug report with ReproGate evidence
+description: Report a reproducible bug with structured evidence.
+title: "[Bug]: "
+labels: ["reprogate:needs-info"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Paste a ReproGate Evidence Manifest in the fenced block below.
+        ReproGate validates evidence quality — not AI authorship.
+        Fill in the values below and remove these instructions before submitting.
+  - type: textarea
+    id: reprogate
+    attributes:
+      label: ReproGate Evidence Manifest
+      description: Replace placeholder values. All fields marked with * are required for a complete score.
+      value: |
+        ```reprogate
+        schemaVersion: "0.1"
+        reportType: bug          # bug | regression | performance | compatibility | security
+        projectName: your-project
+        affectedVersion: 0.0.0   # * exact version where the bug appears
+        environment:
+          os: Ubuntu 24.04        # * OS and version
+          runtime: Node.js 20     # runtime and version
+          dependencies:
+            your-dep: 1.0.0
+        summary: "One specific sentence: what breaks and under what condition"  # *
+        expectedBehavior: "What should happen"           # *
+        actualBehavior: "What actually happens instead"  # *
+        stepsToReproduce:          # * at least one deterministic step
+          - Clone the repo
+          - Run npm test
+          - Observe the failing assertion
+        commands:
+          - npm test
+        redactionNotes: "No secrets or tokens included."
+        aiAssisted: false
+        humanReviewed: true       # * set true only after manual review
+        createdAt: "2026-01-01T00:00:00.000Z"  # replace with today's date
+        ```
+    validations:
+      required: true

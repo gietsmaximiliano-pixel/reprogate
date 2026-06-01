@@ -1,0 +1,18 @@
+name: ReproGate issue validation
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  validate-issue:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate ReproGate evidence
+        uses: gietsmaximiliano-pixel/reprogate/packages/github-action@v0.1.0
+        with:
+          github-token: ${{ github.token }}

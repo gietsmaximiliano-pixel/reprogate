@@ -90,7 +90,7 @@ body:
           - Second deterministic step
         aiAssisted: false
         humanReviewed: true
-        createdAt: "2026-06-01T00:00:00.000Z"
+        createdAt: "${new Date().toISOString().slice(0, 10)}T00:00:00.000Z"
         \`\`\`
     validations:
       required: true
@@ -98,12 +98,58 @@ body:
 }
 
 function securityGuidance(): string {
-  return `# Security Report Guidance
-
-ReproGate helps structure evidence, but public issue automation must never execute commands from untrusted reports.
-
-For vulnerabilities, avoid posting secrets, exploit chains, weaponized payloads, or private personal data in public issues.
-Use this manifest to describe affected versions, environment details, reproducible symptoms, and safe redacted evidence.
+  return `name: Security report (structured evidence)
+description: >
+  Report a security issue with structured evidence. Do NOT include exploit payloads,
+  credentials, or weaponized proof-of-concept code in public issues.
+  For high-severity vulnerabilities use the private Security Advisories tab instead.
+title: "[Security]: "
+labels: ["reprogate:needs-info", "security"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Before submitting:** If this issue can be exploited without additional context,
+        use [GitHub Security Advisories](https://docs.github.com/en/code-security/security-advisories)
+        to report privately. Public issues are visible to everyone immediately.
+  - type: textarea
+    id: reprogate
+    attributes:
+      label: ReproGate Evidence Manifest
+      description: >
+        Fill in the manifest below. Set reportType to "security".
+        Describe symptoms and affected versions without including exploit details.
+      value: |
+        \`\`\`reprogate
+        schemaVersion: "0.1"
+        reportType: security
+        projectName: your-project
+        affectedVersion: 0.0.0
+        environment:
+          os: Operating system and version
+          runtime: Runtime and version
+          dependencies: {}
+        summary: Concise description of the security symptom (not the exploit)
+        expectedBehavior: What the secure behavior should be
+        actualBehavior: What the vulnerable behavior is (no payloads)
+        stepsToReproduce:
+          - Safe step that demonstrates the symptom
+        redactionNotes: Secrets, tokens, and payloads have been omitted.
+        aiAssisted: false
+        humanReviewed: true
+        createdAt: "${new Date().toISOString().slice(0, 10)}T00:00:00.000Z"
+        \`\`\`
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety checklist
+      options:
+        - label: I have not included credentials, tokens, or exploit payloads in this issue.
+          required: true
+        - label: I have verified the issue affects the version listed above.
+          required: true
 `;
 }
 
@@ -123,7 +169,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Validate ReproGate evidence
-        uses: reprogate/reprogate/packages/github-action@v0.1.0
+        uses: gietsmaximiliano-pixel/reprogate/packages/github-action@v0.1.0
         with:
           github-token: \${{ github.token }}
 `;
@@ -132,11 +178,36 @@ jobs:
 function maintainerSetupGuide(): string {
   return `# ReproGate Maintainer Setup
 
-1. Review \`.reprogate/config.yml\`.
-2. Commit the generated GitHub issue template and workflow.
-3. Ask reporters to run \`reprogate create\` or paste a fenced \`reprogate\` YAML block.
-4. Never execute commands from public issues automatically.
-5. Use \`reprogate verify-safe-run <path>\` only after manual review and only for trusted reports.
+## Files created
+
+- \`.reprogate/config.yml\` — minimum actionability score, label names, safe-run settings.
+- \`.github/ISSUE_TEMPLATE/bug-report.yml\` — native GitHub issue form reporters see.
+- \`.github/ISSUE_TEMPLATE/security-report.yml\` — structured security report form.
+- \`.github/workflows/reprogate.yml\` — automatic validation Action.
+
+## Next steps
+
+1. Commit all generated files to your default branch.
+2. Open the Issues tab and click "New issue" to preview the form.
+3. Adjust \`minimumActionabilityScore\` in \`.reprogate/config.yml\` to match your project's bar.
+4. Watch the first few labeled issues and tune field guidance in the templates.
+
+## Reporter experience
+
+Reporters fill in a native GitHub form — no tool or account beyond GitHub is required.
+The YAML block is pre-filled; they replace the placeholder values.
+
+## Security reports
+
+For high-severity vulnerabilities, direct reporters to GitHub Security Advisories
+(the "Report a vulnerability" button on the Security tab) rather than public issues.
+The security form in this template is for lower-severity, publicly-safe disclosures.
+
+## Safe-run (advanced, opt-in)
+
+Set \`safeRun.enabled: true\` in \`.reprogate/config.yml\` only after reading
+the threat model at https://github.com/gietsmaximiliano-pixel/reprogate/blob/main/docs/THREAT_MODEL.md.
+Safe-run requires Docker and must only be used with manually reviewed, trusted reports.
 `;
 }
 
@@ -147,7 +218,7 @@ export async function initProject(
   const files = [
     [".reprogate/config.yml", exampleConfig()],
     [".github/ISSUE_TEMPLATE/bug-report.yml", bugReportTemplate()],
-    [".github/ISSUE_TEMPLATE/security-report-guidance.md", securityGuidance()],
+    [".github/ISSUE_TEMPLATE/security-report.yml", securityGuidance()],
     [".github/workflows/reprogate.yml", workflowTemplate()],
     ["docs/REPROGATE_SETUP.md", maintainerSetupGuide()]
   ] as const;
