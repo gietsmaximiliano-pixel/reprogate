@@ -144,6 +144,70 @@ git commit -m "fix: complete live Docker verification"
 
 No remote repository should be created and nothing should be pushed until the publication guide is followed.
 
+## Post-publication CI fixes (2026-06-01)
+
+### CI pnpm setup
+
+Three GitHub Actions runs were needed to stabilise the workflow after the initial push:
+
+| Run | Error | Fix |
+| --- | ----- | --- |
+| #1 | `Unable to locate executable file: pnpm` — `corepack enable` left pnpm out of PATH on GitHub-hosted runners | Replaced `corepack enable` step with `pnpm/action-setup@v4` (official action, installs pnpm and adds it to PATH) |
+| #2 | `Error: Multiple versions of pnpm specified` — `pnpm/action-setup@v4` read version from `packageManager` field **and** from the explicit `version: 10` in the workflow | Removed `version: 10`; the action now reads `pnpm@10.15.0` from `packageManager` in `package.json` |
+| #3 | Green — all steps passed | — |
+
+### Node.js 20 action deprecation review
+
+GitHub will force Node.js 24 for all action runtimes starting **2026-06-16**. The following was found and addressed:
+
+| Action | Old version | Change | Rationale |
+| --- | --- | --- | --- |
+| `actions/checkout` | `@v4` | kept `@v4`; added `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` job env | `checkout@v5/v6` changed credential storage; no backwards-compatible Node24 v4 patch exists |
+| `pnpm/action-setup` | `@v4` | kept `@v4`; covered by `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24` | Latest major is `v6.0.8`; upgrading requires careful testing of cache-path interactions with `setup-node` |
+| `actions/setup-node` | `@v4` | upgraded to `@v5` | `v5.0.0` was the first release that runs on the Node.js 24 action runtime; `v6.0.0` broke `cache: pnpm` (limited automatic caching to npm only), so `@v5` is the correct target |
+
+The `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true` env var covers `checkout` and `pnpm/action-setup` immediately, matching the opt-in mechanism documented in the GitHub deprecation notice.
+
+### Local verification re-run (post-fix)
+
+All required gates re-run after the CI workflow changes and before the fix commit:
+
+- `corepack pnpm format:check`: passed.
+- `corepack pnpm lint`: passed.
+- `corepack pnpm typecheck`: passed; 5 packages, no errors.
+- `corepack pnpm test`: passed; 5 test files, 28 tests passed.
+- `corepack pnpm build`: passed; all 5 packages built cleanly.
+- `corepack pnpm --filter "./packages/**" -r pack`: passed; all 5 tarballs contain `dist/`.
+
+### Clean-folder tarball installation test
+
+Test performed in a temporary directory outside the repository (`../reprogate-install-test/`).
+
+```sh
+mkdir ../reprogate-install-test
+cd ../reprogate-install-test
+npm init -y
+npm install \
+  ../reprogate/reprogate-spec-0.1.0.tgz \
+  ../reprogate/reprogate-dashboard-0.1.0.tgz \
+  ../reprogate/reprogate-0.1.0.tgz
+```
+
+Result: `added 40 packages, 0 vulnerabilities`.
+
+Commands tested as an external user:
+
+| Command | Result |
+| --- | --- |
+| `npx reprogate --version` | `0.1.0` |
+| `npx reprogate --help` | full command list printed |
+| `npx reprogate validate ../reprogate/examples/basic-node-bug/reprogate.yml` | `valid`, score `100/100`, all evidence ok |
+| `npx reprogate render ../reprogate/examples/basic-node-bug/reprogate.yml` | full Markdown issue summary rendered |
+| `npx reprogate receipt ../reprogate/examples/basic-node-bug/reprogate.yml` | receipt written, hash `d01abce63b49bea3caff51a51883802b7e0fdac797c608a2c74275cab39b66f3` |
+| `npx reprogate dashboard receipts -o dashboard-out` | `Dashboard written to dashboard-out/index.html`, 1 receipt, 1 valid, 0 invalid |
+
+All commands passed. Temporary test directory removed after verification.
+
 ## Remaining steps before publication
 
 1. Review the generated GitHub Action bundle in `packages/github-action/dist/index.js`.
