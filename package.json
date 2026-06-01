@@ -1,0 +1,32 @@
+{
+  "name": "reprogate-monorepo",
+  "version": "0.1.0",
+  "description": "Evidence-first intake tooling for actionable open-source reports.",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "packageManager": "pnpm@10.15.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "corepack pnpm --filter \"./packages/**\" -r build",
+    "typecheck": "corepack pnpm --filter \"./packages/**\" -r typecheck",
+    "test": "corepack pnpm build && vitest run packages",
+    "lint": "eslint . --max-warnings=0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "ci": "corepack pnpm format:check && corepack pnpm lint && corepack pnpm typecheck && corepack pnpm test && corepack pnpm build"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.2",
+    "@vercel/ncc": "^0.38.3",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.2",
+    "vitest": "^2.1.8"
+  }
+}

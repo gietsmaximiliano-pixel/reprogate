@@ -1,0 +1,26 @@
+schemaVersion: "0.1"
+reportType: bug
+projectName: example-package
+affectedVersion: 1.2.3
+environment:
+  os: Windows 11
+  runtime: Node.js 20.18.1
+  dependencies:
+    example-package: 1.2.3
+summary: CLI exits with code 0 even when validation fails
+expectedBehavior: The CLI should return a non-zero exit code for invalid manifests.
+actualBehavior: The CLI prints validation errors but exits with code 0.
+stepsToReproduce:
+  - Install example-package 1.2.3.
+  - Run the validator against an invalid manifest.
+  - Observe that the process exits with code 0.
+commands:
+  - npm test
+redactionNotes: No secrets or personal data are included.
+aiAssisted: false
+humanReviewed: true
+evidenceFiles:
+  - path: evidence/output.log
+    sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+    kind: log
+createdAt: "2026-05-31T23:30:00-03:00"

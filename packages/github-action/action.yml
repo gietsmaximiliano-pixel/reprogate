@@ -1,0 +1,14 @@
+name: ReproGate issue evidence validator
+description: Validate ReproGate Evidence Manifests embedded in GitHub issues.
+author: ReproGate maintainers
+inputs:
+  github-token:
+    description: Token used to label and comment on issues.
+    required: true
+  dry-run:
+    description: Parse and validate without changing labels or comments.
+    required: false
+    default: "false"
+runs:
+  using: node20
+  main: dist/index.js

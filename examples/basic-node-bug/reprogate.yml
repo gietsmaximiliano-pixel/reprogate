@@ -1,0 +1,29 @@
+schemaVersion: "0.1"
+reportType: bug
+projectName: basic-node-bug
+affectedVersion: 1.0.0
+environment:
+  os: Ubuntu 24.04
+  runtime: Node.js 20
+  dependencies:
+    basic-node-bug: 1.0.0
+summary: Calculator add returns one more than the expected sum
+expectedBehavior: Calling add(2, 2) should return 4.
+actualBehavior: Calling add(2, 2) returns 5.
+stepsToReproduce:
+  - Open the example project.
+  - Run npm test.
+  - Observe the failing assertion output.
+commands:
+  - npm test
+logFiles:
+  - evidence/output.log
+redactionNotes: No secrets, tokens, or personal data are included.
+aiAssisted: false
+humanReviewed: true
+evidenceFiles:
+  - path: evidence/output.log
+    sha256: 266f085c81f0431054a77bbc01ced14a845506a1632ff45a2ae345ac7f3677a0
+    kind: log
+    description: Captured failing test output.
+createdAt: "2026-06-01T00:00:00.000Z"

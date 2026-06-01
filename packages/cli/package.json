@@ -1,0 +1,39 @@
+{
+  "name": "reprogate",
+  "version": "0.1.0",
+  "description": "Cross-platform CLI for ReproGate evidence manifests.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "bin": {
+    "reprogate": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "templates",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node ../../scripts/clean-dist.mjs dist && tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^7.2.1",
+    "@reprogate/dashboard": "workspace:*",
+    "@reprogate/spec": "workspace:*",
+    "commander": "^12.1.0",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9"
+  }
+}

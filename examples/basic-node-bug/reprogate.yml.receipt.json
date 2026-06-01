@@ -1,0 +1,50 @@
+{
+  "receiptFormatVersion": "0.1",
+  "validatedAt": "2026-06-01T00:00:00.000Z",
+  "cliVersion": "0.1.0",
+  "manifestHash": "9322638b1c5b564e37a4ae06979fe67a1ec5b1739271e50bef9c4a8596b8e32c",
+  "manifest": {
+    "schemaVersion": "0.1",
+    "reportType": "bug",
+    "projectName": "basic-node-bug",
+    "affectedVersion": "1.0.0",
+    "summary": "Calculator add returns one more than the expected sum",
+    "createdAt": "2026-06-01T00:00:00.000Z"
+  },
+  "validation": {
+    "valid": true,
+    "missingFields": [],
+    "invalidFields": [],
+    "evidence": [
+      {
+        "path": "evidence/output.log",
+        "expectedSha256": "266f085c81f0431054a77bbc01ced14a845506a1632ff45a2ae345ac7f3677a0",
+        "actualSha256": "266f085c81f0431054a77bbc01ced14a845506a1632ff45a2ae345ac7f3677a0",
+        "exists": true,
+        "matches": true
+      }
+    ]
+  },
+  "actionability": {
+    "score": 100,
+    "reasons": [
+      "+5: Supported schema version is present.",
+      "+4: Report type is bug.",
+      "+6: Project name and affected version are present.",
+      "+6: Operating system is described.",
+      "+5: Runtime information is included.",
+      "+6: Relevant dependency versions are listed.",
+      "+10: Summary is specific enough to be useful.",
+      "+8: Expected behavior is stated.",
+      "+8: Actual behavior is stated.",
+      "+16: Reproduction steps are detailed.",
+      "+8: Reporter supplied reproduction commands.",
+      "+8: Evidence references are included.",
+      "+5: Local evidence files include SHA-256 hashes.",
+      "+4: Redaction notes are provided.",
+      "+7: Reporter says they manually reviewed and understood the report.",
+      "0: Reporter says no AI assistance was used."
+    ]
+  },
+  "receiptHash": "e545221df3fb7c53cf2e05e14cc7bed394755d54f2c82002e67e7c880602cda0"
+}

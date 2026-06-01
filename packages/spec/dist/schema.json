@@ -1,0 +1,185 @@
+{
+  "$ref": "#/definitions/ReproGateEvidenceManifest",
+  "definitions": {
+    "ReproGateEvidenceManifest": {
+      "type": "object",
+      "properties": {
+        "schemaVersion": {
+          "type": "string",
+          "const": "0.1"
+        },
+        "reportType": {
+          "type": "string",
+          "enum": [
+            "bug",
+            "regression",
+            "performance",
+            "compatibility",
+            "security"
+          ]
+        },
+        "projectName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "affectedVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "environment": {
+          "type": "object",
+          "properties": {
+            "os": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Operating system and version, for example Windows 11."
+            },
+            "runtime": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Runtime and version, for example Node.js 20.18.1."
+            },
+            "dependencies": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string",
+                "minLength": 1
+              },
+              "propertyNames": {
+                "minLength": 1
+              },
+              "description": "Map of dependency names to versions relevant to this report."
+            }
+          },
+          "required": [
+            "os"
+          ],
+          "additionalProperties": false
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 10
+        },
+        "expectedBehavior": {
+          "type": "string",
+          "minLength": 1
+        },
+        "actualBehavior": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stepsToReproduce": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "safeFixturePaths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "logFiles": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "screenshots": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "externalEvidenceLinks": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "redactionNotes": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aiAssisted": {
+          "type": "boolean"
+        },
+        "humanReviewed": {
+          "type": "boolean"
+        },
+        "evidenceFiles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Manifest-relative path to a local evidence file."
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$",
+                "description": "SHA-256 hash of the local evidence file."
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "fixture",
+                  "log",
+                  "screenshot",
+                  "trace",
+                  "other"
+                ],
+                "default": "other"
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "reportType",
+        "projectName",
+        "affectedVersion",
+        "environment",
+        "summary",
+        "expectedBehavior",
+        "actualBehavior",
+        "stepsToReproduce",
+        "aiAssisted",
+        "humanReviewed",
+        "createdAt"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
